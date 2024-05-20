@@ -1,0 +1,15 @@
+{
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"customizations": {
+        "vscode": {
+            "extensions": [
+				"fwcd.kotlin",
+				"ms-azuretools.vscode-docker",
+				"vscjava.vscode-gradle"
+			]
+		}
+	},
+	"workspaceFolder": "/app"
+}
