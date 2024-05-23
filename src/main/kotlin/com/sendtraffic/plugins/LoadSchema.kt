@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.*
 
 @Serializable
 data class ExposedLoadJob(val description: String, val url: String)
+
 class LoadService(private val database: Database) {
     object LoadTests : Table() {
         val id = integer("id").autoIncrement()
