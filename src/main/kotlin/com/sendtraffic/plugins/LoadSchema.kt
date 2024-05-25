@@ -8,12 +8,18 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
 
 @Serializable
-data class ExposedLoadJob(val description: String, val url: String)
+data class ExposedLoadJob(
+    val url: String,
+    val rate: Int = 1,
+    val duration: Int = 60
+)
 
 class LoadService(private val database: Database) {
     object LoadTests : Table() {
         val id = integer("id").autoIncrement()
-        val description = varchar("description", length = 50)
+        val complete = bool("complete").default(false)
+        val rate = integer("rate")
+        val duration = integer("duration")
         val url = varchar("url", length = 250)
 
         override val primaryKey = PrimaryKey(id)
@@ -30,15 +36,22 @@ class LoadService(private val database: Database) {
 
     suspend fun create(loadJob: ExposedLoadJob): Int = dbQuery {
         LoadTests.insert {
-            it[description] = loadJob.description
             it[url] = loadJob.url
+            it[rate] = loadJob.rate
+            it[duration] = loadJob.duration
         }[LoadTests.id]
     }
 
     suspend fun read(id: Int): ExposedLoadJob? {
         return dbQuery {
             LoadTests.select { LoadTests.id eq id }
-                .map { ExposedLoadJob(it[LoadTests.description], it[LoadTests.url]) }
+                .map {
+                    ExposedLoadJob(
+                        it[LoadTests.url],
+                        it[LoadTests.rate],
+                        it[LoadTests.duration]
+                    )
+                }
                 .singleOrNull()
         }
     }
@@ -46,8 +59,9 @@ class LoadService(private val database: Database) {
     suspend fun update(id: Int, loadJob: ExposedLoadJob) {
         dbQuery {
             LoadTests.update({ LoadTests.id eq id }) {
-                it[description] = loadJob.description
                 it[url] = loadJob.url
+                it[rate] = loadJob.rate
+                it[duration] = loadJob.duration
             }
         }
     }
