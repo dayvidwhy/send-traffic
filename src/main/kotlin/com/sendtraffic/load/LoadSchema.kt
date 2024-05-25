@@ -1,4 +1,4 @@
-package com.sendtraffic.plugins
+package com.sendtraffic.load
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction

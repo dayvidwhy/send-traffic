@@ -1,6 +1,7 @@
 package com.sendtraffic
 
 import com.sendtraffic.plugins.*
+import com.sendtraffic.load.*
 import io.ktor.server.application.*
 import java.io.File
 
